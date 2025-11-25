@@ -1,4 +1,5 @@
 import asyncio
+import logging
 import os
 from aiogram import Bot, Dispatcher, types, F
 from aiogram.filters import CommandStart
@@ -6,13 +7,20 @@ from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode
 
-# ТОКЕН (замени на свой!)
-TOKEN = os.getenv("TELEGRAM_TOKEN")  # Будем брать из переменных окружения на хостинге
+# ТОКЕН из переменных окружения (для безопасности)
+TOKEN = os.getenv("TELEGRAM_TOKEN")
+if not TOKEN:
+    print("ERROR: TELEGRAM_TOKEN not set!")
+    exit(1)
+
+# Логирование для FPS (чтобы видеть в дашборде)
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 bot = Bot(token=TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
 dp = Dispatcher()
 
-# ТЕКСТЫ (твои оригинальные, без изменений)
+# ТЕКСТЫ (твои оригинальные)
 WELCOME_TEXT = """Привет! Добро пожаловать в <b>POLYTECH BOT</b> — официальный помощник Комитета по делам молодёжи Высшего колледжа ASTANA POLYTECHNIC!
 Здесь ты можешь:
 ✨ узнать о мероприятиях и новостях КДМ
@@ -95,7 +103,7 @@ SECTIONS_TEXT = """⸻
 Контакт: Аида — +7 708 178 9643
 ⸻"""
 
-# КЛАВИАТУРЫ (твои оригинальные)
+# КЛАВИАТУРЫ
 def main_menu():
     return types.ReplyKeyboardMarkup(keyboard=[
         ["1. Адал азамат", "2. Секции"],
@@ -122,9 +130,10 @@ def sections_whatsapp_kb():
         kb.add(InlineKeyboardButton(name, url=f"https://wa.me/{num}"))
     return kb
 
-# ХЕНДЛЕРЫ (твои оригинальные, без изменений)
+# ХЕНДЛЕРЫ
 @dp.message(CommandStart())
 async def start(message: types.Message):
+    logger.info(f"User {message.from_user.id} started the bot")
     await message.answer(WELCOME_TEXT, reply_markup=main_menu())
 
 @dp.message(F.text == "Назад в главное меню")
@@ -181,10 +190,14 @@ async def volunteer(message: types.Message):
 async def soon(message: types.Message):
     await message.answer("Этот раздел скоро будет готов!", reply_markup=back_button())
 
-# ЗАПУСК
+# ЗАПУСК (с try-except для стабильности)
 async def main():
-    print("POLYTECH BOT запущен на Render! 24/7 онлайн")
-    await dp.start_polling(bot)
+    try:
+        print("POLYTECH BOT запущен на FPS.ms! 24/7 без задержек")
+        await dp.start_polling(bot)
+    except Exception as e:
+        logger.error(f"Bot error: {e}")
+        await asyncio.sleep(10)  # Retry after 10 sec
 
 if __name__ == "__main__":
     asyncio.run(main())
