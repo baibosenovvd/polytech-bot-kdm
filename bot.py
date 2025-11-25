@@ -196,16 +196,15 @@ async def soon(message: types.Message):
 
 # ==================== ЗАПУСК ====================
 async def main():
-    print("POLYTECH BOT запущен на Railway — всё работает!")
+    print("POLYTECH BOT — жёсткая очистка старых подключений...")
     
-    # ЭТО ГЛАВНОЕ — убивает все старые подключения
+    # Самая мощная комбинация, которая убивает любой Conflict
     await bot.delete_webhook(drop_pending_updates=True)
-    await bot.session.close()  # закрываем старую сессию
-    await asyncio.sleep(1)
+    await bot.get_updates(offset=-1, limit=0, timeout=1)  # магия
+    await bot.session.close()
+    await asyncio.sleep(2)
     
-    # Теперь запускаем polling
-    await dp.start_polling(bot, allowed_updates=dp.resolve_used_update_types())
+    print("Бот запущен чисто и навсегда!")
+    await dp.start_polling(bot)
 
-if __name__ == "__main__":
-    asyncio.run(main())
 
