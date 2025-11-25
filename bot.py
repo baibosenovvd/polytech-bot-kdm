@@ -1,26 +1,18 @@
 import asyncio
-import logging
 import os
 from aiogram import Bot, Dispatcher, types, F
 from aiogram.filters import CommandStart
-from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+from aiogram.types import KeyboardButton, ReplyKeyboardMarkup, InlineKeyboardMarkup, InlineKeyboardButton
 from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode
 
-# ТОКЕН из переменных окружения (для безопасности)
-TOKEN = os.getenv("TELEGRAM_TOKEN")
-if not TOKEN:
-    print("ERROR: TELEGRAM_TOKEN not set!")
-    exit(1)
-
-# Логирование для FPS (чтобы видеть в дашборде)
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+# ТОКЕН из переменных (Railway, Render, локально — везде работает)
+TOKEN = os.getenv("TELEGRAM_TOKEN", "8519092341:AAHFYG4r0LWiy8jwicXb2urM_kOC-jiQ7SM")
 
 bot = Bot(token=TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
 dp = Dispatcher()
 
-# ТЕКСТЫ (твои оригинальные)
+# ==================== ТЕКСТЫ (твои оригинальные) ====================
 WELCOME_TEXT = """Привет! Добро пожаловать в <b>POLYTECH BOT</b> — официальный помощник Комитета по делам молодёжи Высшего колледжа ASTANA POLYTECHNIC!
 Здесь ты можешь:
 ✨ узнать о мероприятиях и новостях КДМ
@@ -103,17 +95,17 @@ SECTIONS_TEXT = """⸻
 Контакт: Аида — +7 708 178 9643
 ⸻"""
 
-# КЛАВИАТУРЫ
+# ==================== КЛАВИАТУРЫ (ИСПРАВЛЕННЫЕ!) ====================
 def main_menu():
-    return types.ReplyKeyboardMarkup(keyboard=[
-        ["1. Адал азамат", "2. Секции"],
-        ["3. Студенческая поддержка", "4. Спорт"],
-        ["5. Соц.сети", "6. Мероприятия"],
-        ["7. Таза Қазақстан", "8. Волонтёрство"]
+    return ReplyKeyboardMarkup(keyboard=[
+        [KeyboardButton(text="1. Адал азамат"), KeyboardButton(text="2. Секции")],
+        [KeyboardButton(text="3. Студенческая поддержка"), KeyboardButton(text="4. Спорт")],
+        [KeyboardButton(text="5. Соц.сети"), KeyboardButton(text="6. Мероприятия")],
+        [KeyboardButton(text="7. Таза Қазақстан"), KeyboardButton(text="8. Волонтёрство")]
     ], resize_keyboard=True)
 
 def back_button():
-    return types.ReplyKeyboardMarkup(keyboard=[["Назад в главное меню"]], resize_keyboard=True)
+    return ReplyKeyboardMarkup(keyboard=[[KeyboardButton(text="Назад в главное меню")]], resize_keyboard=True)
 
 def sections_whatsapp_kb():
     kb = InlineKeyboardMarkup(row_width=1)
@@ -127,13 +119,12 @@ def sections_whatsapp_kb():
         ("Еркежан (Монтажёры)", "77770215361"), ("Аида (Организаторы)", "77081789643"),
     ]
     for name, num in contacts:
-        kb.add(InlineKeyboardButton(name, url=f"https://wa.me/{num}"))
+        kb.add(InlineKeyboardButton(text=name, url=f"https://wa.me/{num}"))
     return kb
 
-# ХЕНДЛЕРЫ
+# ==================== ХЕНДЛЕРЫ ====================
 @dp.message(CommandStart())
 async def start(message: types.Message):
-    logger.info(f"User {message.from_user.id} started the bot")
     await message.answer(WELCOME_TEXT, reply_markup=main_menu())
 
 @dp.message(F.text == "Назад в главное меню")
@@ -145,12 +136,13 @@ async def sections(message: types.Message):
     await message.answer(SECTIONS_TEXT, reply_markup=back_button())
     await message.answer("Нажми на имя — сразу откроется WhatsApp", reply_markup=sections_whatsapp_kb())
 
+# Остальные хендлеры (оставляем как были — они работают)
 @dp.message(F.text == "3. Студенческая поддержка")
 async def support_main(message: types.Message):
-    kb = types.ReplyKeyboardMarkup(keyboard=[
-        ["Учебная поддержка"], ["Социальная поддержка"],
-        ["Психологическая поддержка"], ["Горячие линии — экстренная помощь"],
-        ["Назад в главное меню"]
+    kb = ReplyKeyboardMarkup(keyboard=[
+        [KeyboardButton(text="Учебная поддержка"), KeyboardButton(text="Социальная поддержка")],
+        [KeyboardButton(text="Психологическая поддержка"), KeyboardButton(text="Горячие линии — экстренная помощь")],
+        [KeyboardButton(text="Назад в главное меню")]
     ], resize_keyboard=True)
     await message.answer("Привет! Ты в разделе «Студенческая поддержка»\nВыбери нужный вид помощи:", reply_markup=kb)
 
@@ -190,14 +182,10 @@ async def volunteer(message: types.Message):
 async def soon(message: types.Message):
     await message.answer("Этот раздел скоро будет готов!", reply_markup=back_button())
 
-# ЗАПУСК (с try-except для стабильности)
+# ==================== ЗАПУСК ====================
 async def main():
-    try:
-        print("POLYTECH BOT запущен на FPS.ms! 24/7 без задержек")
-        await dp.start_polling(bot)
-    except Exception as e:
-        logger.error(f"Bot error: {e}")
-        await asyncio.sleep(10)  # Retry after 10 sec
+    print("POLYTECH BOT успешно запущен на Railway! 24/7 без прокси")
+    await dp.start_polling(bot)
 
 if __name__ == "__main__":
     asyncio.run(main())
