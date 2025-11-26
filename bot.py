@@ -333,14 +333,15 @@ async def back(message: types.Message):
 async def adal(message: types.Message):
     await message.answer(ADAL_AZAMAT_TEXT, reply_markup=back_button())
     await message.answer("Толық брендбук:", reply_markup=InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(text="📥 Скачать PDF", url="https://drive.google.com/file/d/1Jp2yMd88DUguOgLiMv7B6n5ZROT9lR6r/view?usp=sharing")]]))
-
+    ]]) + back_button().keyboard
+    
 @dp.message(F.text == "2. Секции")
 async def sections(message: types.Message):
     if KDM_PHOTO:
         await message.answer_photo(KDM_PHOTO)
     await message.answer(SECTIONS_TEXT)
     await message.answer("Напиши руководителю секции в WhatsApp:", reply_markup=sections_keyboard())
-    await message.answer("Вернуться в меню", reply_markup=back_button())  # ← исправлено
+    await message.answer("Готово! Выбирай секцию", reply_markup=back_button())  # ← исправлено
 
 # ==================== 3. Студенческая поддержка ====================
 @dp.message(F.text == "3. Студенческая поддержка")
@@ -439,14 +440,14 @@ async def socials(message: types.Message):
                             [InlineKeyboardButton(text="polytech.astana", url="https://instagram.com/polytech.astana")],
                             [InlineKeyboardButton(text="apc_kdm_", url="https://instagram.com/apc_kdm_")]
                         ]))
-    await message.answer("Вернуться в меню", reply_markup=back_button())
+    ]) + back_button().keyboard
 
 @dp.message(F.text == "6. Мероприятия")
 async def events(message: types.Message):
     if APC_PHOTO:
         await message.answer_photo(APC_PHOTO)
     await message.answer(EVENTS_TEXT, reply_markup=InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(text="Все афиши → @apc_kdm_", url="https://instagram.com/apc_kdm_")]]))
-    await message.answer("Вернуться в меню", reply_markup=back_button())
+    ]]) + back_button().keyboard
 
 @dp.message(F.text == "7. Таза Қазақстан")
 async def taza(message: types.Message):
@@ -465,6 +466,7 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
+
 
 
 
