@@ -135,12 +135,14 @@ async def volunteer(message: types.Message):
 # (я их не трогаю, чтобы не удлинять сообщение, но они у тебя уже есть и работают)
 
 # ==================== ЗАПУСК ====================
+# ... весь твой код до main() остаётся без изменений ...
+
 async def main():
-    print("POLYTECH BOT запускается на Railway...")
-
-    # Только это — и больше ничего не трогаем во время старта!
+    print("Запускаем POLYTECH BOT...")
     await bot.delete_webhook(drop_pending_updates=True)
-    await asyncio.sleep(1)
-
-    print("Бот успешно запущен — Политех онлайн 24/7!")
+    print("Бот онлайн — Политех живёт!")
     await dp.start_polling(bot)
+
+if __name__ == "__main__":
+    asyncio.run(main())
+
