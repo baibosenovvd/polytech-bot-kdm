@@ -138,11 +138,8 @@ async def volunteer(message: types.Message):
 # ... весь твой код до main() остаётся без изменений ...
 
 async def main():
-    print("Запускаем POLYTECH BOT...")
-    await bot.delete_webhook(drop_pending_updates=True)
-    print("Бот онлайн — Политех живёт!")
+    print("POLYTECH BOT запускается...")
     await dp.start_polling(bot)
 
 if __name__ == "__main__":
     asyncio.run(main())
-
