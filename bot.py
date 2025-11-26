@@ -136,17 +136,11 @@ async def volunteer(message: types.Message):
 
 # ==================== ЗАПУСК ====================
 async def main():
-    print("POLYTECH BOT — жёсткая очистка всех старых подключений...")
-    
-    # Убиваем ВСЁ старое
-    await bot.delete_webhook(drop_pending_updates=True)
-    try:
-        await bot.get_updates(offset=-1, limit=0, timeout=1)
-    except:
-        pass
-    await bot.session.close()
-    await asyncio.sleep(3)
-    
-    print("Бот запущен чисто и навсегда — Политех живёт!")
-    await dp.start_polling(bot)
+    print("POLYTECH BOT запускается на Railway...")
 
+    # Только это — и больше ничего не трогаем во время старта!
+    await bot.delete_webhook(drop_pending_updates=True)
+    await asyncio.sleep(1)
+
+    print("Бот успешно запущен — Политех онлайн 24/7!")
+    await dp.start_polling(bot)
