@@ -5,6 +5,7 @@ from aiogram.filters import CommandStart
 from aiogram.types import KeyboardButton, ReplyKeyboardMarkup, InlineKeyboardMarkup, InlineKeyboardButton
 from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode
+from aiogram.utils.keyboard import InlineKeyboardBuilder
 
 TOKEN = os.getenv("TELEGRAM_TOKEN")
 if not TOKEN:
@@ -22,6 +23,26 @@ WELCOME_TEXT = """Привет! Добро пожаловать в <b>POLYTECH B
 💬 получить поддержку или задать вопрос
 🔥 быть в центре студенческой жизни нашего колледжа
 Политех — территория возможностей. А мы — рядом, чтобы помочь тебе раскрыть себя!"""
+
+ADAL_AZAMAT_TEXT = """<b>«Адал Азамат»</b>
+Біртұтас тәрбие бағдарламасы  
+Брендинг және білім беру ұйымдарының безендірілуінің бірыңғай дизайны  
+(соңғы нұсқа – вер.11, 135 бет)
+
+<b>Негізгі мақсат</b>  
+Мектептерде ұлттық және жалпыадамзаттық құндылықтарға негізделген тәрбиелік орта қалыптастыру.  
+Оқу ортасы – «үшінші мұғалім».
+
+<b>6 негізгі құндылық</b>  
+1. Тәуелсіздік және отаншылдық  
+2. Бірлік және ынтымақ  
+3. Әділдік және жауапкершілік  
+4. Заң және тәртіп  
+5. Еңбекқорлық және кәсіби біліктілік  
+6. Жасампаздық және жаңашылдық
+
+<b>Толық брендбук (135 бет, PDF)</b>  
+Төмендегі кнопкадан бірден жүктеп алуға болады ↓"""
 
 SECTIONS_TEXT = """⸻
 🎶 Домбра
@@ -160,13 +181,10 @@ HOW_TO_JOIN_VOLUNTEER_TEXT = """🌟 Как вступить в ряды вол�
 
 SOCIALS_TEXT = """📱 Социальные сети Политеха
 Мы везде, где ты! Подписывайся, чтобы быть в центре студенческой жизни 🔥
-
 📌 <b>polytech.astana</b> — официальный Instagram колледжа
-Новости, расписание, объявления, жизнь кампуса и всё официальное
-
-📌 <b>apc_kdm</b> — официальный Instagram КДМ и активистов
+Новости, расписание, объявления, жизнь колледжа и всё официальное
+📌 <b>apc_kdm_</b> — официальный Instagram КДМ и активистов
 Мероприятия, репортажи, backstage, мемы, творчество и движ всей молодёжи Политеха
-
 Следи за нами — и ты никогда ничего не пропустишь!"""
 
 # ==================== КЛАВИАТУРЫ ====================
@@ -216,7 +234,7 @@ def sections_whatsapp_kb():
 def socials_kb():
     return InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text="polytech.astana — официальный колледж", url="https://instagram.com/polytech.astana")],
-        [InlineKeyboardButton(text="apc_kdm — КДМ и активисты", url="https://instagram.com/apc_kdm")]
+        [InlineKeyboardButton(text="apc_kdm_ — КДМ и активисты", url="https://instagram.com/apc_kdm_")]
     ])
 
 def taza_join_kb():
@@ -224,6 +242,14 @@ def taza_join_kb():
 
 def volunteer_join_kb():
     return InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(text="Стать волонтёром", url="https://wa.me/77771639387")]])
+
+def adal_download_kb():
+    builder = InlineKeyboardBuilder()
+    builder.add(InlineKeyboardButton(
+        text="📥 Толық брендбук (135 бет, вер.11) жүктеп алу",
+        url="https://drive.google.com/file/d/1Jp2yMd88DUguOgLiMv7B6n5ZROT9lR6r/view?usp=sharing"
+    ))
+    return builder.as_markup()
 
 # ==================== ХЕНДЛЕРЫ ====================
 @dp.message(CommandStart())
@@ -233,6 +259,11 @@ async def start(message: types.Message):
 @dp.message(F.text == "Назад в главное меню")
 async def back_to_main(message: types.Message):
     await message.answer("Главное меню", reply_markup=main_menu())
+
+@dp.message(F.text == "1. Адал азамат")
+async def adal_azamat(message: types.Message):
+    await message.answer(ADAL_AZAMAT_TEXT, reply_markup=back_button(), disable_web_page_preview=True)
+    await message.answer("Толық нұсқаны жүктеп алыңыз:", reply_markup=adal_download_kb())
 
 @dp.message(F.text == "2. Секции")
 async def sections(message: types.Message):
@@ -318,7 +349,7 @@ async def volunteer(message: types.Message):
     await message.answer("🌟 Как вступить в ряды волонтёров?", reply_markup=volunteer_join_kb())
     await message.answer(HOW_TO_JOIN_VOLUNTEER_TEXT)
 
-@dp.message(F.text.in_({"1. Адал азамат", "4. Спорт", "6. Мероприятия"}))
+@dp.message(F.text.in_({"4. Спорт", "6. Мероприятия"}))
 async def soon(message: types.Message):
     await message.answer("Этот раздел скоро будет готов!", reply_markup=back_button())
 
