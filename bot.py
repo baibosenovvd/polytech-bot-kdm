@@ -219,11 +219,11 @@ SPORT_TEXT = """<b>Высший колледж Astana POLYTECHNIC активно
 По всем вопросам обращайтесь в спортивный зал."""
 
 SPORT_PHOTOS = [
-    "https://i.ibb.co/Y7zd69Jq/sport1.jpg",
-    "https://i.ibb.co/xKwGBhHs/sport2.jpg",
-    "https://i.ibb.co/ymWqZ1XQ/sport3.jpg",
-    "https://i.ibb.co/TMkjsDYC/sport4.jpg",
-    "https://i.ibb.co/mVL25jMf/sport5.jpg"
+    "https://images2.imgbox.com/8e/9a/0vK8oW7Q_o.jpg",
+    "https://images2.imgbox.com/2f/8b/9t5vM3tL_o.jpg",
+    "https://images2.imgbox.com/c3/8e/5wK8pX9j_o.jpg",
+    "https://images2.imgbox.com/2d/2f/3q9vR8sK_o.jpg",
+    "https://images2.imgbox.com/2e/6f/7rT5mN2p_o.jpg"
 ]
 
 # ==================== КЛАВИАТУРЫ ====================
@@ -411,3 +411,4 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
+
