@@ -9,7 +9,7 @@ from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
-# Защита от двойного запуска (на Render, Railway, VPS)
+# Защита от двойного запуска (на Render, Railway, VPS
 try:
     lock_file = open("/tmp/polytech_bot.lock", "w")
     fcntl.lockf(lock_file, fcntl.LOCK_EX | fcntl.LOCK_NB)
@@ -424,3 +424,4 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
+
