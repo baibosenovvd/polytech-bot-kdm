@@ -1,11 +1,21 @@
 import asyncio
 import os
+import fcntl
+import sys
 from aiogram import Bot, Dispatcher, types, F
 from aiogram.filters import CommandStart
-from aiogram.types import KeyboardButton, ReplyKeyboardMarkup, InlineKeyboardMarkup, InlineKeyboardButton
+from aiogram.types import KeyboardButton, ReplyKeyboardMarkup, InlineKeyboardMarkup, InlineKeyboardButton, FSInputFile
 from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode
 from aiogram.utils.keyboard import InlineKeyboardBuilder
+
+# Защита от двойного запуска (на Render, Railway, VPS)
+try:
+    lock_file = open("/tmp/polytech_bot.lock", "w")
+    fcntl.lockf(lock_file, fcntl.LOCK_EX | fcntl.LOCK_NB)
+except (IOError, OSError):
+    print("Бот уже запущен где-то ещё! Останавливаю этот экземпляр.")
+    sys.exit(1)
 
 TOKEN = os.getenv("TELEGRAM_TOKEN")
 if not TOKEN:
@@ -14,7 +24,7 @@ if not TOKEN:
 bot = Bot(token=TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
 dp = Dispatcher()
 
-# ==================== ВСЕ ТЕКСТЫ (ПОЛНОСТЬЮ БЕЗ СОКРАЩЕНИЙ) ====================
+# ==================== ПОЛНЫЕ ТЕКСТЫ ====================
 WELCOME_TEXT = """Привет! Добро пожаловать в <b>POLYTECH BOT</b> — официальный помощник Комитета по делам молодёжи Высшего колледжа ASTANA POLYTECHNIC!
 Здесь ты можешь:
 ✨ узнать о мероприятиях и новостях КДМ
@@ -158,7 +168,7 @@ VOLUNTEER_TEXT = """🤝 Волонтёры Политеха
 4. Детские учреждения
 — Посещение детских садиков и центров развития
 — Проведение мини-игр, мастер-классов, чтение сказок
-— Подарочные акции и праздники
+— Подарочные акции и праздки
 5. Поддержка малоимущих семей
 — Сбор одежды, продуктов и школьных принадлежностей
 — Социальные акции и адресная помощь
@@ -216,13 +226,13 @@ SPORT_TEXT = """<b>Высший колледж Astana POLYTECHNIC активно
 
 По всем вопросам вы можете обратиться в спортивный зал."""
 
-# Фото в максимальном качестве (перезалиты на CatBox — самый надёжный хостинг)
+# ЛОКАЛЬНЫЕ ФАЙЛЫ — САМЫЙ ВЕЧНЫЙ СПОСОБ
 SPORT_PHOTOS = [
-    "https://telegra.ph/file/89c53d6f8e8d8c8b8a89.jpg",
-    "https://telegra.ph/file/9a8b7c6d5e4f3g2h1i0j.jpg",
-    "https://telegra.ph/file/ab9c8d7e6f5g4h3i2j1k.jpg",
-    "https://telegra.ph/file/bc0d9e8f7g6h5i4j3k2l.jpg",
-    "https://telegra.ph/file/cd1e0f9g8h7i6j5k4l3m.jpg"
+    FSInputFile("photos/sport1.jpg"),
+    FSInputFile("photos/sport2.jpg"),
+    FSInputFile("photos/sport3.jpg"),
+    FSInputFile("photos/sport4.jpg"),
+    FSInputFile("photos/sport5.jpg"),
 ]
 
 # ==================== КЛАВИАТУРЫ ====================
@@ -371,18 +381,19 @@ async def hotlines(message: types.Message):
 4. 103 — скорая помощь (при угрозе жизни)"""
     await message.answer(text)
 
-# 100% РАБОЧИЙ РАЗДЕЛ СПОРТ — ФОТО ОТПРАВЛЯЮТСЯ ПО ОДНОМУ (НИКАКИХ ОШИБОК)
+# ВЕЧНЫЙ РАЗДЕЛ СПОРТ — через локальные файлы
 @dp.message(F.text == "4. Спорт")
 async def sport(message: types.Message):
-    for i, url in enumerate(SPORT_PHOTOS):
+    for i, photo in enumerate(SPORT_PHOTOS):
         try:
             if i == 0:
-                await message.answer_photo(url, caption="🏆 Спорт в Astana Polytechnic")
+                await message.answer_photo(photo, caption="🏆 Спорт в Astana Polytechnic")
             else:
-                await message.answer_photo(url)
-            await asyncio.sleep(0.35)  # защита от флуда
+                await message.answer_photo(photo)
+            await asyncio.sleep(0.33)
         except Exception as e:
             print(f"Ошибка отправки фото: {e}")
+            await message.answer("⚠️ Одно из фото временно недоступно")
 
     await message.answer(SPORT_TEXT, reply_markup=back_button(), disable_web_page_preview=True)
 
@@ -413,4 +424,3 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
-
