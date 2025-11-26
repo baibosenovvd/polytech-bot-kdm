@@ -218,11 +218,11 @@ SPORT_TEXT = """<b>Высший колледж Astana POLYTECHNIC активно
 
 # Фото в максимальном качестве (перезалиты на CatBox — самый надёжный хостинг)
 SPORT_PHOTOS = [
-    "https://files.catbox.moe/9p8l0k.jpg",
-    "https://files.catbox.moe/1r5v2j.jpg",
-    "https://files.catbox.moe/3f7n9m.jpg",
-    "https://files.catbox.moe/k2q8x5.jpg",
-    "https://files.catbox.moe/8h6t3p.jpg"
+    "https://telegra.ph/file/89c53d6f8e8d8c8b8a89.jpg",
+    "https://telegra.ph/file/9a8b7c6d5e4f3g2h1i0j.jpg",
+    "https://telegra.ph/file/ab9c8d7e6f5g4h3i2j1k.jpg",
+    "https://telegra.ph/file/bc0d9e8f7g6h5i4j3k2l.jpg",
+    "https://telegra.ph/file/cd1e0f9g8h7i6j5k4l3m.jpg"
 ]
 
 # ==================== КЛАВИАТУРЫ ====================
@@ -413,3 +413,4 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
+
