@@ -340,7 +340,7 @@ async def sections(message: types.Message):
         await message.answer_photo(KDM_PHOTO)
     await message.answer(SECTIONS_TEXT)
     await message.answer("Напиши руководителю секции в WhatsApp:", reply_markup=sections_keyboard())
-    await message.answer("⬅", reply_markup=back_button())  # ← исправлено
+    await message.answer("Вернуться в меню", reply_markup=back_button())  # ← исправлено
 
 # ==================== 3. Студенческая поддержка ====================
 @dp.message(F.text == "3. Студенческая поддержка")
@@ -439,14 +439,14 @@ async def socials(message: types.Message):
                             [InlineKeyboardButton(text="polytech.astana", url="https://instagram.com/polytech.astana")],
                             [InlineKeyboardButton(text="apc_kdm_", url="https://instagram.com/apc_kdm_")]
                         ]))
-    await message.answer("", reply_markup=back_button())
+    await message.answer("Вернуться в меню", reply_markup=back_button())
 
 @dp.message(F.text == "6. Мероприятия")
 async def events(message: types.Message):
     if APC_PHOTO:
         await message.answer_photo(APC_PHOTO)
     await message.answer(EVENTS_TEXT, reply_markup=InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(text="Все афиши → @apc_kdm_", url="https://instagram.com/apc_kdm_")]]))
-    await message.answer("⬅", reply_markup=back_button())
+    await message.answer("Вернуться в меню", reply_markup=back_button())
 
 @dp.message(F.text == "7. Таза Қазақстан")
 async def taza(message: types.Message):
@@ -465,5 +465,6 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
+
 
 
