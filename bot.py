@@ -97,14 +97,13 @@ SECTIONS_TEXT = """🎭 <b>Наши творческие секции</b>
 Для тех, кто уже имеет опыт в танцах или просто уверенно чувствует себя в движении.
 Участники помогают в постановках, выступают на концертных программах и участвуют в танцевальных номерах КДМа.
 Контакт: <b>Салық Айжан</b> — +7 778 303 0208
-🔗 <a href="https://www.instagram.com/p/DDzuUk9NZ3n/?img_index=3&igsh=eXE1N2MwaWNhbjQ=">Фото с репетиции</a>
+🔗 <a href="https://www.instagram.com/p/DDzuUk9NZ3n/?img_index=3&igsh=eXE1N2MwaWNhbjQ=">Фото</a>
 
 ⸻
 🪘 <b>Национальный танец</b>
 Секция для ребят, знакомых с элементами национальной хореографии или любящих традиционные танцы.
 Участники ставят номера, выступают на культурных мероприятиях и поддерживают национальные проекты.
 Контакт: <b>Жанат Асылжан</b> — +7 705 254 4390
-🔗 <a href="https://www.instagram.com/p/DDzuUk9NZ3n/?img_index=3&igsh=eXE1N2MwaWNhbjQ=">Видео</a>
 
 ⸻
 🎤 <b>Вокал</b>
@@ -406,11 +405,11 @@ async def psycho_support(message: types.Message):
 
 <i>Мы гарантируем конфиденциальность.</i>
 
-🧡 Марина Галимова +7 702 535 4759  
+🧡 Марина Галимовна +7 702 535 4759  
 💙 Гульбану Ерсаиновна +7 702 233 5013"""
 
     kb = InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="Написать Марине", url="https://wa.me/77025354759")],
+        [InlineKeyboardButton(text="Написать Марине Галимовне", url="https://wa.me/77025354759")],
         [InlineKeyboardButton(text="Написать Гульбану Ерсаиновне", url="https://wa.me/77022335013")]
     ])
     await message.answer(text, reply_markup=kb)
@@ -440,7 +439,7 @@ async def socials(message: types.Message):
                             [InlineKeyboardButton(text="polytech.astana", url="https://instagram.com/polytech.astana")],
                             [InlineKeyboardButton(text="apc_kdm_", url="https://instagram.com/apc_kdm_")]
                         ]))
-    await message.answer("⬅", reply_markup=back_button())
+    await message.answer("", reply_markup=back_button())
 
 @dp.message(F.text == "6. Мероприятия")
 async def events(message: types.Message):
@@ -466,4 +465,5 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
+
 
